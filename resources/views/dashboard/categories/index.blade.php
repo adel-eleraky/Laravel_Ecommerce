@@ -6,7 +6,11 @@
 
 @section('main_content')
 
+
     <a href="{{ route("category.create") }}" class="btn btn-primary mb-4">Create New Category</a>
+    @if (session('success'))
+        <div class="alert alert-success"> {{ session('success') }} </div>
+    @endif
     <table class="table center">
         <thead class="table-dark">
             <tr>
@@ -23,15 +27,15 @@
                 <tr>
                     <td>{{ $category->id }}</td>
                     <td>{{ $category->name }}</td>
-                    <td>{{ $category->image }}</td>
+                    <td><img style="width: 150px" src="{{ asset('storage/' . $category->image) }}" alt="Category Has No Image" /></td>
                     <td>{{ $category->created_at }}</td>
-                    <td>{{ $category->slug }}</td>
+                    <td>{{ asset($category->slug) }}</td>
                     <td>
                         <a href="{{ route("category.edit" , $category->id ) }}" class="btn btn-secondary">Edit</a>
                         <form action="{{ route("category.destroy" , $category->id ) }}" method="post" class="d-inline">
                             @csrf
                             @method("delete")
-                            <a class="btn btn-danger">Delete</a>
+                            <button class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>

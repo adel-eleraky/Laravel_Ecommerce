@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Products;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -32,7 +35,32 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+        // validate inputs
+        $request->validate(Category::rules());
+
+        // merge slug input to the request
+        $request->merge([
+            'slug' => Str::slug($request->post('name'))
+        ]);
+
+
+        // remove image input from request
+        $data = $request->except('image');
+
+        // upload image to public disk
+        if($request->hasFile('image')){
+
+            $file = $request->file('image');
+
+            $path = $file->store('uploads' , ['disk' => 'public']);
+
+            $data['image'] = $path;
+        }
+
+        Category::create($data);
+
+        return Redirect::route('category.index')->with('success' , "Category Created Successfully");
+
     }
 
     /**
@@ -49,6 +77,7 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category =  Category::findOrFail($id);
+
         return view("dashboard.categories.edit" , compact("category"));
     }
 
@@ -57,7 +86,43 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $category = Category::findOrFail($id);
+
+        $request->validate(Category::rules($id));
+
+        // merge slug input to the request
+        $request->merge([
+            'slug' => Str::slug($request->post('name'))
+        ]);
+
+
+        // remove image input from request
+        $data = $request->except('image');
+
+        // upload image to public disk
+        if($request->hasFile('image')){
+
+            $file = $request->file('image');
+
+            $path = $file->store('uploads' , ['disk' => 'public']);
+
+            // save image path in data array
+            $data['image'] = $path;
+
+            // delete old image
+            $old_image = $category->image;
+
+            if($old_image){
+                Storage::disk('public')->delete($old_image);
+            }
+        }
+
+
+        $category->update($data);
+
+        return Redirect::route('category.index')->with('success' , "Category Updated Successfully");
+
     }
 
     /**
@@ -65,6 +130,15 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        // delete old image
+        if($category->image){
+            Storage::disk('public')->delete($category->image);
+        }
+
+        $category->delete();
+
+        return Redirect::route('category.index')->with('success' , 'Category Deleted Successfully');
     }
 }
