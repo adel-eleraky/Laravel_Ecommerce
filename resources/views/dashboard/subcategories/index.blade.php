@@ -7,6 +7,9 @@
 @section('main_content')
 
     <a href="{{ route("subcategory.create") }}" class="btn btn-primary mb-4">Create New SubCategory</a>
+    @if (session('success'))
+        <div class="alert alert-success">  {{ session('success') }}</div>
+    @endif
     <table class="table center">
         <thead class="table-dark">
             <tr>
@@ -24,7 +27,7 @@
                 <tr>
                     <td>{{ $subCategory->id }}</td>
                     <td>{{ $subCategory->name }}</td>
-                    <td>{{ $subCategory->image }}</td>
+                    <td><img style="width: 150px" src="{{ asset('storage/' . $subCategory->image) }}" alt='subCategory has no image'></td>
                     <td>{{ $subCategory->category_id }}</td>
                     <td>{{ $subCategory->created_at }}</td>
                     <td>{{ $subCategory->slug }}</td>
@@ -33,7 +36,7 @@
                         <form action="{{ route("subcategory.destroy" , $subCategory->id ) }}" method="post" class="d-inline">
                             @csrf
                             @method("delete")
-                            <a class="btn btn-danger">Delete</a>
+                            <button class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>

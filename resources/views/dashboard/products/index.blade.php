@@ -7,12 +7,17 @@
 @section('main_content')
 
     <a href="{{ route("product.create") }}" class="btn btn-primary mb-4">Create New Product</a>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
     <table class="table center">
         <thead class="table-dark">
             <tr>
                 <td>ID</td>
                 <td>Name</td>
                 <td>Image</td>
+                <td>quantity</td>
+                <td>SubCategory_id</td>
                 <td>Created At</td>
                 <td>Slug</td>
                 <td>Operations</td>
@@ -23,7 +28,9 @@
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->image }}</td>
+                    <td><img width="150px" src="{{ asset('storage/'.$product->image ) }}" alt="Product Has No Image"></td>
+                    <td>{{ $product->quantity }}</td>
+                    <td>{{ $product->subcategory_id }}</td>
                     <td>{{ $product->created_at }}</td>
                     <td>{{ $product->slug }}</td>
                     <td>
@@ -31,7 +38,7 @@
                         <form action="{{ route("product.destroy" , $product->id ) }}" method="post" class="d-inline">
                             @csrf
                             @method("delete")
-                            <a class="btn btn-danger">Delete</a>
+                            <button class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>

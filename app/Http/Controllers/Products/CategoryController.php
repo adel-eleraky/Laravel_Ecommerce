@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+
+    private $data = [];
+
     /**
      * Display a listing of the resource.
      */
@@ -45,19 +48,12 @@ class CategoryController extends Controller
 
 
         // remove image input from request
-        $data = $request->except('image');
+        $this->data = $request->except('image');
 
-        // upload image to public disk
-        if($request->hasFile('image')){
+        $this->uploadImage($request);
 
-            $file = $request->file('image');
 
-            $path = $file->store('uploads' , ['disk' => 'public']);
-
-            $data['image'] = $path;
-        }
-
-        Category::create($data);
+        Category::create($this->data);
 
         return Redirect::route('category.index')->with('success' , "Category Created Successfully");
 
@@ -98,28 +94,18 @@ class CategoryController extends Controller
 
 
         // remove image input from request
-        $data = $request->except('image');
+        $this->data = $request->except('image');
 
-        // upload image to public disk
-        if($request->hasFile('image')){
+        $this->uploadImage($request);
 
-            $file = $request->file('image');
+        // delete old image if exist
+        $old_image = $category->image;
 
-            $path = $file->store('uploads' , ['disk' => 'public']);
-
-            // save image path in data array
-            $data['image'] = $path;
-
-            // delete old image
-            $old_image = $category->image;
-
-            if($old_image){
-                Storage::disk('public')->delete($old_image);
-            }
+        if($old_image && isset($this->data['image'])){
+            Storage::disk('public')->delete($old_image);
         }
 
-
-        $category->update($data);
+        $category->update($this->data);
 
         return Redirect::route('category.index')->with('success' , "Category Updated Successfully");
 
@@ -140,5 +126,19 @@ class CategoryController extends Controller
         $category->delete();
 
         return Redirect::route('category.index')->with('success' , 'Category Deleted Successfully');
+    }
+
+    // function to upload image
+    public function uploadImage(Request $request)
+    {
+        // upload image to public disk
+        if($request->hasFile('image')){
+
+            $file = $request->file('image');
+
+            $path = $file->store('uploads' , ['disk' => 'public']);
+
+            $this->data['image'] = $path;
+        }
     }
 }
