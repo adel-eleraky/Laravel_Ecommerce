@@ -10,25 +10,16 @@
     <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="Name" class="form-label">Name</label>
-            <input type="Name" class="form-control" id="Name" name="name" value={{ old('name') }}>
-            @error('name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="name">Name</x-form.label>
+            <x-form.input type="text" id="name" name="name"  />
         </div>
         <div class="mb-3">
-            <label for="details" class="form-label">Details</label>
-            <textarea class="form-control" id="details" name="details">{{ old('details') }}</textarea>
-            @error('details')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="details">Details</x-form.label>
+            <x-form.textarea id="details" name="details"  />
         </div>
         <div class="mb-3">
-            <label for="file" class="form-label">Choose Image</label>
-            <input class="form-control" type="file" id="file" name="image">
-            @error('image')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="image">Choose image</x-form.label>
+            <x-form.input type="file" name="image" id="image" />
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

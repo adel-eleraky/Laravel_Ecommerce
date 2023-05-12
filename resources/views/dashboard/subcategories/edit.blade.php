@@ -10,39 +10,21 @@
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label for="Name" class="form-label">Name</label>
-            <input type="Name" class="form-control" id="Name" name="name" value="{{ old('name' , $subCategory->name) }}">
-            @error('name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="name" >Name</x-form.label>
+            <x-form.input id="name" name="name" type="text" :value="$subCategory->name" />
         </div>
         <div class="mb-3">
-            <label for="details" class="form-label">Details</label>
-            <textarea class="form-control" id="details" name="details">{{ old('details' , $subCategory->details) }}</textarea>
-            @error('details')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="details" >Details</x-form.label>
+            <x-form.textarea id="details" name="details" :value="$subCategory->details" />
         </div>
         <div class="mb-3">
-            <label for="details" class="form-label">parent Category</label>
-            <select name="category_id" id="category_id">
-                @forelse ($parent_categories as $category)
-                    <option value="{{ $category->id }}" @selected( $category->id == $subCategory->category_id ) > {{ $category->name }}</option>
-                @empty
-                    <option value="">no category found</option>
-                @endforelse
-            </select>
-            @error('category_id')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="category_id" >Parent Category</x-form.label>
+            <x-form.select id="category_id" name="category_id" :options="$parent_categories" notFound="Category" />
         </div>
         <div class="mb-3">
-            <label for="formFile" class="form-label">Choose Image</label>
-            <input class="form-control" type="file" id="formFile" name="image">
-            @error('image')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-            <img style="width: 150px" src={{ asset('storage/' . $subCategory->image) }} alt="Category Has No image">
+            <x-form.label for="image" >Choose Image</x-form.label>
+            <x-form.input  type="file" id="image" name="image" />
+            <img style="width: 150px" src={{ asset('storage/' . $subCategory->image) }} alt="SubCategory Has No image">
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

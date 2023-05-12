@@ -9,45 +9,24 @@
     <form action="{{ route("product.store") }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="Name" class="form-label">Name</label>
-            <input type="Name" class="form-control" id="Name" name="name">
-            @error('name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="name">Name</x-form.label>
+            <x-form.input type="text" id="name" name="name"  />
         </div>
         <div class="mb-3">
-            <label for="quantity" class="form-label">Quantity</label>
-            <input type="number" class="form-control" id="quantity" name="quantity">
-            @error('quantity')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="quantity">Quantity</x-form.label>
+            <x-form.input type="number" id="quantity" name="quantity"  />
         </div>
         <div class="mb-3">
-            <label for="details" class="form-label">Details</label>
-            <textarea class="form-control" id="details" name="details"></textarea>
-            @error('details')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="details">Details</x-form.label>
+            <x-form.textarea id="details" name="details"  />
         </div>
         <div class="mb-3">
-            <label for="subcategory_id" class="form-label">parent SubCategory</label>
-            <select name="subcategory_id" id="subcategory_id">
-                @forelse ($parent_subCategories as $subCategory)
-                    <option value="{{ $subCategory->id }}"> {{ $subCategory->name }}</option>
-                @empty
-                    <option value="">no SubCategory found</option>
-                @endforelse
-            </select>
-            @error('subcategory_id')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="subcategory_id">Parent SubCategory</x-form.label>
+            <x-form.select id="subcategory_id" name="subcategory_id" :options="$parent_subCategories" notFound="subCategory" />
         </div>
         <div class="mb-3">
-            <label for="formFile" class="form-label">Choose Image</label>
-            <input class="form-control" type="file" id="formFile" name="image">
-            @error('image')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <x-form.label for="image">Choose image</x-form.label>
+            <x-form.input type="file" name="image" id="image" />
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
