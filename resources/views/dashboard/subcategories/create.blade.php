@@ -6,7 +6,7 @@
 
 @section('main_content')
 
-    <form action="{{ route("subcategory.store") }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route("subcategories.store") }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <x-form.label for="name">Name</x-form.label>

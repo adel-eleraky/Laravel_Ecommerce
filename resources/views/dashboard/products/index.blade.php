@@ -6,7 +6,7 @@
 
 @section('main_content')
 
-    <a href="{{ route("product.create") }}" class="btn btn-primary mb-4">Create New Product</a>
+    <a href="{{ route("products.create") }}" class="btn btn-primary mb-4">Create New Product</a>
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -34,8 +34,8 @@
                     <td>{{ $product->created_at }}</td>
                     <td>{{ $product->slug }}</td>
                     <td>
-                        <a href="{{ route("product.edit" , $product->id ) }}" class="btn btn-secondary">Edit</a>
-                        <form action="{{ route("product.destroy" , $product->id ) }}" method="post" class="d-inline">
+                        <a href="{{ route("products.edit" , $product->id ) }}" class="btn btn-secondary">Edit</a>
+                        <form action="{{ route("products.destroy" , $product->id ) }}" method="post" class="d-inline">
                             @csrf
                             @method("delete")
                             <button class="btn btn-danger">Delete</button>
@@ -49,4 +49,5 @@
             @endforelse
         </tbody>
     </table>
+    {{ $products->links() }}
 @endsection

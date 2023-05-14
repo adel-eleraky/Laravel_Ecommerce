@@ -6,7 +6,7 @@
 
 @section('main_content')
 
-    <a href="{{ route("subcategory.create") }}" class="btn btn-primary mb-4">Create New SubCategory</a>
+    <a href="{{ route("subcategories.create") }}" class="btn btn-primary mb-4">Create New SubCategory</a>
     @if (session('success'))
         <div class="alert alert-success">  {{ session('success') }}</div>
     @endif
@@ -32,8 +32,8 @@
                     <td>{{ $subCategory->created_at }}</td>
                     <td>{{ $subCategory->slug }}</td>
                     <td>
-                        <a href="{{ route("subcategory.edit" , $subCategory->id ) }}" class="btn btn-secondary">Edit</a>
-                        <form action="{{ route("subcategory.destroy" , $subCategory->id ) }}" method="post" class="d-inline">
+                        <a href="{{ route("subcategories.edit" , $subCategory->id ) }}" class="btn btn-secondary">Edit</a>
+                        <form action="{{ route("subcategories.destroy" , $subCategory->id ) }}" method="post" class="d-inline">
                             @csrf
                             @method("delete")
                             <button class="btn btn-danger">Delete</button>
@@ -47,4 +47,5 @@
             @endforelse
         </tbody>
     </table>
+    {{ $subCategories->links() }}
 @endsection

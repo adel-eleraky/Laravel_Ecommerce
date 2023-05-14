@@ -211,21 +211,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a href="{{ route("category.index") }}" class="nav-link active">
+                            <a href="{{ route("categories.index") }}" class="nav-link active">
                                 <p>
                                     Categories
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item menu-open">
-                            <a href="{{ route("subcategory.index") }}" class="nav-link active">
+                            <a href="{{ route("subcategories.index") }}" class="nav-link active">
                                 <p>
                                     SubCategories
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item menu-open">
-                            <a href="{{ route("product.index") }}" class="nav-link active">
+                            <a href="{{ route("products.index") }}" class="nav-link active">
                                 <p>
                                     Products
                                 </p>

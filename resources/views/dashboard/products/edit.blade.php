@@ -6,7 +6,7 @@
 
 @section('main_content')
 
-    <form action="{{ route("product.update" , $product->id) }}" method="post">
+    <form action="{{ route("products.update" , $product->id) }}" method="post">
         @csrf
         @method('PUT')
         <div class="mb-3">

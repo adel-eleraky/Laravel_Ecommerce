@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Products\CategoryController;
-use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Products\SubCategoryController;
+use App\Http\Controllers\Dashboard\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource("dashboard/category" , CategoryController::class);
-Route::resource("dashboard/subcategory" , SubCategoryController::class);
-Route::resource("dashboard/product" , ProductController::class);
+Route::resource("dashboard/categories" , CategoryController::class);
+Route::resource("dashboard/subcategories" , SubCategoryController::class);
+Route::resource("dashboard/products" , ProductController::class);
 
 
 Route::get('/dashboard', [DashboardController::class , "index"])

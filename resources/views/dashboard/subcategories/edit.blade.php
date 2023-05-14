@@ -6,7 +6,7 @@
 
 @section('main_content')
 
-    <form action="{{ route("subcategory.update"  , $subCategory->id) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route("subcategories.update"  , $subCategory->id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">

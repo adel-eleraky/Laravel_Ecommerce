@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Models\Category;
+use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
-class CategoryController extends Controller
+class ProductController extends Controller
 {
 
     private $data = [];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories =  Category::all();
-
-        return view("dashboard.categories.index" , compact("categories"));
+        $products = Product::paginate(4);
+        return view("dashboard.products.index" , compact("products"));
     }
 
     /**
@@ -29,7 +28,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("dashboard.categories.create");
+        $parent_subCategories = Subcategory::select('id' , 'name')->get();
+        return view("dashboard.products.create" , compact('parent_subCategories'));
     }
 
     /**
@@ -37,26 +37,24 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-
         // validate inputs
-        $request->validate(Category::rules());
+        $request->validate(Product::rules());
 
-        // merge slug input to the request
+        // add slug input to the request
         $request->merge([
             'slug' => Str::slug($request->post('name'))
         ]);
 
-
-        // remove image input from request
+        // remove image input from the request
         $this->data = $request->except('image');
 
+        // store image if exits
         $this->uploadImage($request);
 
+        // create product
+        Product::create($this->data);
 
-        Category::create($this->data);
-
-        return Redirect::route('category.index')->with('success' , "Category Created Successfully");
-
+        return Redirect::route('products.index')->with('success' , "Product Created Successfully");
     }
 
     /**
@@ -72,9 +70,10 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category =  Category::findOrFail($id);
+        $product = Product::findOrFail($id);
 
-        return view("dashboard.categories.edit" , compact("category"));
+        $parent_subCategories = Subcategory::select('id' , 'name')->get();
+        return view("dashboard.products.edit" , compact("product" , "parent_subCategories"));
     }
 
     /**
@@ -82,10 +81,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $product = Product::findOrFail($id);
 
-        $category = Category::findOrFail($id);
-
-        $request->validate(Category::rules($id));
+        // validate inputs
+        $request->validate(Product::rules($id));
 
         // merge slug input to the request
         $request->merge([
@@ -99,16 +98,15 @@ class CategoryController extends Controller
         $this->uploadImage($request);
 
         // delete old image if exist
-        $old_image = $category->image;
+        $old_image = $product->image;
 
         if($old_image && isset($this->data['image'])){
             Storage::disk('public')->delete($old_image);
         }
 
-        $category->update($this->data);
+        $product->update($this->data);
 
-        return Redirect::route('category.index')->with('success' , "Category Updated Successfully");
-
+        return Redirect::route('products.index')->with('success' , "Product Updated Successfully");
     }
 
     /**
@@ -116,16 +114,17 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
+        $product = Product::findOrFail($id);
 
-        // delete old image
-        if($category->image){
-            Storage::disk('public')->delete($category->image);
+        // delete image if exist
+        if($product->image){
+            Storage::disk('public')->delete($product->image);
         }
 
-        $category->delete();
+        // delete product
+        $product->delete();
 
-        return Redirect::route('category.index')->with('success' , 'Category Deleted Successfully');
+        return Redirect::route('products.index')->with('success' , "Product Deleted Successfully");
     }
 
     // function to upload image
